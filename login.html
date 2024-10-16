@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-image: url('dredem.png'); /* Set the background image */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Container for form and status message */
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Styling for the form container */
+        form {
+            background-color: rgba(0, 0, 0, 0.75); /* Dark translucent background */
+            padding: 30px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            color: white; /* White text */
+        }
+
+        /* Form header */
+        legend {
+            font-family: 'Great Vibes';
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Label styling */
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #ddd;
+        }
+
+        /* Input fields */
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #333;
+            color: white;
+        }
+
+        /* Input placeholder color */
+        ::placeholder {
+            color: #aaa;
+        }
+
+        /* Checkbox group */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group input {
+            margin-right: 10px;
+        }
+
+        /* Login button styling */
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Message styling */
+        #statusMessage {
+            margin-top: 15px;
+            font-size: 16px;
+            text-align: center;
+            color:white;
+            font-family: 'Great Vibes';
+        }
+
+        /* Ensure form doesn't extend beyond its container */
+        fieldset {
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <form id="loginForm">
+            <fieldset>
+                <legend>Dre Fits<br></legend>
+
+                <label for="login">Username <span style="color: red;">*</span></label>
+                <input type="text" id="loginUsername" name="login" placeholder="Enter your username" required>
+
+                <label for="login-password">Password <span style="color: red;">*</span></label>
+                <input type="password" id="loginPassword" name="login-password" placeholder="Enter your password" required>
+
+                <button id="login-button" type="submit">LOGIN</button>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="remember-me" name="remember-me">
+                    <label for="remember-me">Remember me</label>
+                </div>
+            </fieldset>
+        </form>
+
+        <!-- Status message below form -->
+        <div id="statusMessage"></div>
+    </div>
+
+    <script>
+        const sampleUsers = {
+            "user1": { username: "user1", password: "userpw101", cart: [], invoice: "" },
+            "user2": { username: "user2", password: "userpw202", cart: [], invoice: "" },
+            "user3": { username: "user3", password: "userpw303", cart: [], invoice: "" },
+            "user4": { username: "user4", password: "userpw404", cart: [], invoice: "" },
+	    "user5": { username: "user5", password: "userpw505", cart: [], invoice: "" }
+
+
+        };
+
+        let loginAttempts = 0; // Track login attempts
+
+        // Get the elements
+        const loginForm = document.getElementById('loginForm');
+        const statusMessage = document.getElementById('statusMessage');
+
+        // Handle form submission
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form from reloading the page
+            const usernameInput = document.getElementById('loginUsername').value;
+            const passwordInput = document.getElementById('loginPassword').value;
+
+            // Validate credentials
+            const user = sampleUsers[usernameInput];
+            if (user && user.password === passwordInput) {
+                alert('Login successful!');
+                statusMessage.textContent = 'Login Successful!';
+                storeLoginData(usernameInput, 'Success');
+                window.location.href = 'products.html'; // Redirect to products page
+            } else {
+                loginAttempts++;
+                statusMessage.textContent = 'Invalid username or password.';
+                alert('Invalid username or password. Please try again.');
+
+                // Check if login attempts reached the limit
+                if (loginAttempts >= 3) {
+                    alert('Too many failed attempts. Redirecting to error page.');
+                    window.location.href = 'error.html'; // Redirect to error page
+                }
+                storeLoginData(usernameInput, 'Fail');
+            }
+        });
+
+        // Store login data in localStorage
+        function storeLoginData(username, status) {
+            const loginData = { username: username, status: status };
+            localStorage.setItem('loginData', JSON.stringify(loginData));
+        }
+    </script>
+
+</body>
+</html>
